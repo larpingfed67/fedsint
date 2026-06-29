@@ -5,13 +5,13 @@ import { Button } from "@/components/ui/button";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Trace — OSINT username reconnaissance" },
+      { title: "Fedsint — OSINT username reconnaissance" },
       {
         name: "description",
         content:
           "Sweep 180+ social networks for a username in seconds. Sherlock-powered OSINT in your browser.",
       },
-      { property: "og:title", content: "Trace — OSINT username reconnaissance" },
+      { property: "og:title", content: "Fedsint — OSINT username reconnaissance" },
       {
         property: "og:description",
         content: "Sweep 180+ social networks for a username in seconds.",
@@ -28,7 +28,7 @@ function Landing() {
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2 text-primary mono">
             <Terminal className="w-5 h-5" />
-            <span className="text-sm tracking-widest">TRACE//OSINT</span>
+            <span className="text-sm tracking-widest">FEDSINT</span>
           </div>
           <Link to="/auth">
             <Button variant="ghost" size="sm">
