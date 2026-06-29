@@ -158,7 +158,7 @@ function AuthPage() {
       <Card className="w-full max-w-md p-8 bg-card/80 backdrop-blur border-primary/30 glow-primary">
         <Link to="/" className="flex items-center gap-2 mb-6 text-primary mono">
           <Terminal className="w-5 h-5" />
-          <span className="text-sm tracking-widest">TRACE//OSINT</span>
+          <span className="text-sm tracking-widest">FEDSINT</span>
         </Link>
         <h1 className="text-2xl font-bold mb-1">
           {mode === "signin" ? "Access terminal" : "Request access key"}

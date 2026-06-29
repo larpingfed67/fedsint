@@ -104,7 +104,7 @@ function Dashboard() {
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2 text-primary mono">
             <Terminal className="w-5 h-5" />
-            <span className="text-sm tracking-widest">TRACE//OSINT</span>
+            <span className="text-sm tracking-widest">FEDSINT</span>
           </Link>
           <Button variant="ghost" size="sm" onClick={signOut}>
             <LogOut className="w-4 h-4 mr-2" /> Sign out
