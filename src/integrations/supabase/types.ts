@@ -14,7 +14,36 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      scans: {
+        Row: {
+          created_at: string
+          found_count: number
+          id: string
+          results: Json
+          total_checked: number
+          user_id: string
+          username: string
+        }
+        Insert: {
+          created_at?: string
+          found_count?: number
+          id?: string
+          results?: Json
+          total_checked?: number
+          user_id: string
+          username: string
+        }
+        Update: {
+          created_at?: string
+          found_count?: number
+          id?: string
+          results?: Json
+          total_checked?: number
+          user_id?: string
+          username?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
