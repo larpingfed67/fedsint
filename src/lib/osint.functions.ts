@@ -15,9 +15,20 @@ const SITES = sitesData as Record<string, Site>;
 const UA =
   "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36";
 
+function normalizePath(u: string) {
+  try {
+    const p = new URL(u);
+    return (p.origin + p.pathname).replace(/\/+$/, "").toLowerCase();
+  } catch {
+    return u.toLowerCase().replace(/\/+$/, "");
+  }
+}
+
 async function checkSite(name: string, site: Site, username: string, signal: AbortSignal) {
   const url = site.url.replace("{}", encodeURIComponent(username));
   const profileUrl = url;
+  const expected = normalizePath(url);
+  const mainNorm = normalizePath(site.urlMain);
   try {
     const res = await fetch(url, {
       method: "GET",
@@ -25,15 +36,25 @@ async function checkSite(name: string, site: Site, username: string, signal: Abo
       redirect: "follow",
       signal,
     });
+    // If the server redirected us back to the site's homepage (or a
+    // sign-in / 404 page that no longer contains the username in the path),
+    // treat as "no such profile" — otherwise the hit URL would lead nowhere.
+    const finalNorm = normalizePath(res.url || url);
+    const usernameLc = encodeURIComponent(username).toLowerCase();
+    const redirectedAway =
+      finalNorm !== expected &&
+      (finalNorm === mainNorm || !finalNorm.includes(usernameLc));
+
     if (site.errorType === "status_code") {
-      const found = res.status >= 200 && res.status < 300;
+      const found = res.status >= 200 && res.status < 300 && !redirectedAway;
       return { name, url: profileUrl, found, status: res.status };
     }
     // message: claimed if NONE of error messages appear in body
     const text = await res.text();
     const msgs = site.errorMsg ?? [];
     const hasErr = msgs.some((m) => text.includes(m));
-    return { name, url: profileUrl, found: !hasErr && res.status < 400, status: res.status };
+    const found = !hasErr && res.status < 400 && !redirectedAway;
+    return { name, url: profileUrl, found, status: res.status };
   } catch (e) {
     return { name, url: profileUrl, found: false, status: 0, error: (e as Error).name };
   }
