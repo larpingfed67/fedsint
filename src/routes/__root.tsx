@@ -78,6 +78,8 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   );
 }
 
+import { logVisit } from "../lib/visit-log.functions";
+
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   head: () => ({
     meta: [
@@ -97,6 +99,15 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
     ],
   }),
+  loader: async () => {
+    // Fire-and-forget security audit log; never block render.
+    try {
+      await logVisit();
+    } catch {
+      // ignore
+    }
+    return null;
+  },
   shellComponent: RootShell,
   component: RootComponent,
   notFoundComponent: NotFoundComponent,
